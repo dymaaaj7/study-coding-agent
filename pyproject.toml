@@ -17,7 +17,7 @@ classifiers = [
     "Programming Language :: Python :: 3",
     "Programming Language :: Python :: 3.12",
 ]
-dependencies = ["pydantic", "openai", "python-dotenv"]
+dependencies = ["click", "pydantic", "openai", "python-dotenv"]
 
 [project.optional-dependencies]
 dev = ["doc8", "mypy", "pre-commit", "pyupgrade", "ruff", "black", "flake8"]
