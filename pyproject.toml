@@ -1,0 +1,174 @@
+[build-system]
+requires = ["setuptools", "setuptools-scm"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "agent_tutorial"
+dynamic = ["version"]
+description = "Learning about coding agent."
+readme = "README.md"
+requires-python = ">=3.12"
+license = { file = "LICENSE.txt" }
+authors = [{ name = "Dimitrije JAnkovic", email = "mita@fatdragon.dev" }]
+keywords = ["project"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.12",
+]
+dependencies = ["pydantic", "openai", "python-dotenv"]
+
+[project.optional-dependencies]
+dev = ["doc8", "mypy", "pre-commit", "pyupgrade", "ruff", "black", "flake8"]
+test = ["pytest", "pytest-asyncio", "pytest-cov", "pytest-trio"]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+"fd_platform_proxy_client" = ["**/py.typed"]
+
+[tool.setuptools.dynamic]
+version = { attr = "fd_platform_proxy_client._version.__version__" }
+
+[tool.doc8]
+ignore-path = "venv,docs/build,docs/source/api"
+allow-long-titles = true
+
+# https://mypy.readthedocs.io/en/stable/config_file.html
+[tool.mypy]
+packages = ["src"]
+mypy_path = ["src"]
+# namespace_packages = true
+# ignore_missing_imports = false
+# follow_imports = "normal"
+# follow_imports_for_stubs = false
+# no_site_packages = false
+# no_silence_site_packages = false
+python_version = "3.12"
+# disallow_any_unimported = false
+# disallow_any_expr = false
+# disallow_any_decorated = false
+# disallow_any_explicit = false
+# disallow_any_generics = false
+# disallow_subclassing_any = false
+# disallow_untyped_calls = false
+# disallow_untyped_defs = false
+# disallow_incomplete_defs = false
+# check_untyped_defs = false
+# disallow_untyped_decorators = false
+# implicit_optional = false
+# strict_optional = true
+warn_redundant_casts = true
+warn_unused_ignores = true
+# warn_no_return = true
+# warn_return_any = false
+warn_unreachable = true
+# ignore_errors = false
+# allow_untyped_globals = false
+# allow_redefinition = false
+# local_partial_types = false
+# disable_error_code = []
+# enable_error_code = []
+# implicit_reexport = true
+# strict_concatenate = false
+# strict_equality = false
+# strict = false
+show_error_context = true
+# show_column_numbers = false
+# hide_error_codes = false
+# pretty = false
+# color_output = true
+# error_summary = true
+# show_absolute_path = false
+# incremental = true
+# cache_fine_grained = false
+# skip_version_check = false
+# skip_cache_mtime_checks = false
+# plugins = [ "numpy.typing.mypy_plugin" ]
+# warn_incomplete_stub = false
+
+# https://docs.astral.sh/ruff/configuration/
+# https://docs.astral.sh/ruff/settings
+# https://pypi.org/project/ruff/
+[tool.ruff]
+extend-select = [
+    "C90",   # mccabe
+    "I",     # isort
+    "N",     # pep8-naming
+    "D",     # pydocstyle
+    "UP",    # pyupgrade
+    "YTT",   # flake8-2020
+    "ANN",   # flake8-annotations
+    "ASYNC", # flake8-async
+    "S",     # flake8-bandit
+    "BLE",   # flake8-blind-except
+    "FBT",   # flake8-boolean-trap
+    "B",     # flake8-bugbear
+    "A",     # flake8-builtins
+    "COM",   # flake8-commas
+    "CPY",   # flake8-copyright
+    "C4",    # flake8-comprehensions
+    "DTZ",   # flake8-datetimez
+    "T10",   # flake8-debugger
+    "DJ",    # flake8-django
+    "EM",    # flake8-errmsg
+    "EXE",   # flake8-executable
+    "FA",    # flake8-future-annotations
+    "ISC",   # flake8-implicit-str-concat
+    "ICN",   # flake8-import-conventions
+    "G",     # flake8-logging-format
+    "INP",   # flake8-no-pep420
+    "PIE",   # flake8-pie
+    "T20",   # flake8-print
+    "PYI",   # flake8-pyi
+    "PT",    # flake8-pytest-style
+    "Q",     # flake8-quotes
+    "RSE",   # flake8-raise
+    "RET",   # flake8-return
+    "SLF",   # flake8-self
+    "SLOT",  # flake8-slots
+    "SIM",   # flake8-simplify
+    "TID",   # flake8-tidy-imports
+    "INT",   # flake8-gettext
+    "ARG",   # flake8-unused-arguments
+    "PTH",   # flake8-use-pathlib
+    "TD",    # flake8-todos
+    "FIX",   # flake8-fixme
+    "ERA",   # eradicate
+    "PD",    # pandas-vet
+    "PGH",   # pygrep-hooks
+    "PL",    # Pylint
+    "TRY",   # tryceratops
+    "FLY",   # flynt
+    "NPY",   # NumPy-specific rules
+    "AIR",   # airflow
+    "PERF",  # Perflint
+    "FURB",  # refurb
+    "LOG",   # flake8-logging
+    "RUF",   # Ruff-specific rules
+]
+extend-ignore = [
+    "ANN002",  # Missing type annotation for `*args`
+    "ANN003",  # Missing type annotation for `**kwargs`
+    "FIX002",  # Line contains TODO - consider resolving the issue
+    "D413",    # We don't want docstrings to end with an empty line
+    "EM101",   # Exception must not use a string literal
+    "EM102",   # Exception must not use a f-string literal
+    "PLR0912", # We don't want to restrict the number of branches
+    "PLR0913", # We don't want to restrict the number of function arguments
+    "PLR0915", # We don't want to restrict the number of statements
+    "S101",    # assert in tests is OK
+    "TD003",   # Missing issue link for this TODO
+    "TRY003",  # Avoid specifying long messages outside the exception class
+]
+# Avoid trying to fix flake8-bugbear (`B`) violations.
+unfixable = ["B"]
+line-length = 80
+target-version = "py312"
+
+[tool.ruff.extend-per-file-ignores]
+"__init__.py" = [
+    "F401", # Ignore unused imports in all `__init__.py` files.
+]
