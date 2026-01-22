@@ -4,6 +4,7 @@
 /docs/build/
 /docs/source/api
 /venv/
+/.venv/
 __pycache__/
 *.egg-info/
 .env
