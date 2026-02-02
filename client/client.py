@@ -1,11 +1,11 @@
 import asyncio
-import os  # noqa: D100
+import os
 from typing import Any, AsyncGenerator  # noqa: UP035
 
 from dotenv import load_dotenv
 from openai import APIConnectionError, APIError, AsyncOpenAI, RateLimitError
 
-from client.response import EventType, StreamEvent, TextDelta, TokenUsage
+from client.response import StreamEventType, StreamEvent, TextDelta, TokenUsage
 
 load_dotenv()
 
@@ -55,7 +55,7 @@ class LLMClient:
                     await asyncio.sleep(wait_time)
                 else:
                     yield StreamEvent(
-                        type=EventType.ERROR,
+                        type=StreamEventType.ERROR,
                         error=f"Rate limit exceeded {e}.",
                     )
                     return
@@ -65,13 +65,13 @@ class LLMClient:
                     await asyncio.sleep(wait_time)
                 else:
                     yield StreamEvent(
-                        type=EventType.ERROR,
+                        type=StreamEventType.ERROR,
                         error=f"Connection error {e}.",
                     )
                     return
             except APIError as e:
                 yield StreamEvent(
-                    type=EventType.ERROR,
+                    type=StreamEventType.ERROR,
                     error=f"Connection error {e}.",
                 )
                 return
@@ -106,12 +106,12 @@ class LLMClient:
 
             if delta.content:
                 yield StreamEvent(
-                    type=EventType.TEXT_DELTA,
+                    type=StreamEventType.TEXT_DELTA,
                     text_delta=TextDelta(delta.content),
                 )
 
         yield StreamEvent(
-            type=EventType.MESSAGE_COMPLETE,
+            type=StreamEventType.MESSAGE_COMPLETE,
             finish_reason=finish_reason,
             usage=usage,
         )
@@ -124,8 +124,8 @@ class LLMClient:
         response = await client.chat.completions.create(**kwargs)
         choice = response.choices[0]
         message = choice.message
-
         text_delta = None
+
         if message.content:
             text_delta = TextDelta(content=message.content)
 
@@ -139,7 +139,7 @@ class LLMClient:
             )
 
         return StreamEvent(
-            type=EventType.MESSAGE_COMPLETE,
+            type=StreamEventType.MESSAGE_COMPLETE,
             text_delta=text_delta,
             finish_reason=choice.finish_reason,
             usage=usage,
